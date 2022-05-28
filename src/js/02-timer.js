@@ -23,28 +23,39 @@ const fp = flatpickr(myInput, {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
+    clearInterval(timerId)
+     btn.removeAttribute("disabled")
     if (selectedDates[0] < new Date()) {
       window.alert("Please choose a date in the future")
-      return btn.setAttribute("disabled", "disabled")
-    }
-    if (timerId) {
-        clearInterval(timerId)
-    }
-    btn.removeAttribute("disabled")
-  },
-});
-btn.addEventListener('click', () => {
-      timerId = setInterval(fn,1000)
-    function fn() {
-      time = new Date(myInput.value) - Date.now();
+      clearInterval(timerId)
+      btn.setAttribute("disabled", "disabled")
+      time = 0
       const { days, hours, minutes, seconds } = convertMs(time);
       refs.day.textContent = pad(days);
       refs.hours.textContent = pad(hours);
       refs.minutes.textContent = pad(minutes);
       refs.seconds.textContent = pad(seconds);
-      btn.setAttribute("disabled", "disabled")
       console.log(time)
+    }
+  },
+});
+btn.addEventListener('click', () => {
+      timerId = setInterval(fn,1000)
+  function fn() {
+      time = new Date(myInput.value) - Date.now();
+      btn.setAttribute("disabled", "disabled")
+      if (time < 1) {
+        return
       }
+       else{
+      const { days, hours, minutes, seconds } = convertMs(time);
+      refs.day.textContent = pad(days);
+      refs.hours.textContent = pad(hours);
+      refs.minutes.textContent = pad(minutes);
+      refs.seconds.textContent = pad(seconds);
+      console.log(time)}
+
+  }
     })
 function convertMs(ms) {
   // Number of milliseconds per unit of time
